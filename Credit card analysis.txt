@@ -1,0 +1,127 @@
+                      1.Basic Queries:
+
+*Retrieve all columns for transactions where the transaction amount is greater than 700.
+SELECT * FROM transactions WHERE transaction_amount > 500;
+
+
+*Display the distinct card types present in the transactions.
+SELECT DISTINCT card_type FROM transactions;
+
+*Count the number of transactions that were made in Delhi.
+SELECT COUNT(*) FROM transactions WHERE city = 'Delhi';
+
+           
+            2.aggregation and Grouping:
+
+*Calculate the total transaction amount for each card type.
+SELECT card_type, SUM(transaction_amount) AS total_amount
+FROM transactions
+GROUP BY card_type;
+
+*Find the average transaction amount for each gender.
+SELECT gender, AVG(transaction_amount) AS avg_amount
+FROM transactions
+GROUP BY gender;
+
+*Determine the city with the highest total transaction amount.
+SELECT city, SUM(transaction_amount) AS total_amount
+FROM transactions
+GROUP BY city
+ORDER BY total_amount DESC
+LIMIT 1;
+
+
+              3.Date Functions:
+
+Calculate the total transaction amount for each year.
+SELECT YEAR(transaction_date) AS year, SUM(transaction_amount) AS total_amount
+FROM transactions
+GROUP BY year;
+
+Find the day of the week with the highest average transaction amount.
+SELECT DAYOFWEEK(transaction_date) AS day_of_week, AVG(transaction_amount) AS avg_amount
+FROM transactions
+GROUP BY day_of_week
+ORDER BY avg_amount DESC
+LIMIT 1;
+
+
+Identify the month with the lowest total transaction amount.
+SELECT MONTH(transaction_date) AS month, SUM(transaction_amount) AS total_amount
+FROM transactions
+GROUP BY month
+ORDER BY total_amount ASC
+LIMIT 1;
+              
+
+                   4.Joins and Subqueries:
+
+Retrieve the transaction details along with the corresponding cardholder's gender.
+SELECT t.*, c.gender
+FROM transactions t
+JOIN cardholders c ON t.card_number = c.card_number;
+
+
+Find the card numbers of transactions made by female cardholders.
+SELECT t.card_number
+FROM transactions t
+JOIN cardholders c ON t.card_number = c.card_number
+WHERE c.gender = 'female';
+
+
+List the transactions made by cardholders whose transaction amount is greater than the average transaction amount.
+SELECT t.*
+FROM transactions t
+JOIN (SELECT AVG(transaction_amount) AS avg_amount FROM transactions) AS sub
+WHERE t.transaction_amount > sub.avg_amount;
+
+
+
+                      5.Data Manipulation:
+
+Update the transaction date for a specific transaction ID.
+UPDATE transactions
+SET transaction_date = '2023-08-01'
+WHERE transaction_id = 12345;
+
+
+Delete transactions where the transaction amount is less than 100.
+DELETE FROM transactions
+WHERE transaction_amount < 100;
+                        
+
+
+                         6.Advanced Analytics:
+
+Calculate the running total of transaction amounts for each card type, ordered by transaction date.
+SELECT card_type, transaction_date, transaction_amount,
+       SUM(transaction_amount) OVER (PARTITION BY card_type ORDER BY transaction_date) AS running_total
+FROM transactions;
+
+
+Find the top 5 cities in terms of the number of transactions.
+SELECT city, COUNT(*) AS transaction_count
+FROM transactions
+GROUP BY city
+ORDER BY transaction_count DESC
+LIMIT 5;
+
+
+Calculate the year-over-year growth rate of total transaction amounts.
+SELECT YEAR(transaction_date) AS year,
+       (SUM(transaction_amount) - LAG(SUM(transaction_amount), 1) OVER (ORDER BY YEAR(transaction_date))) / LAG(SUM(transaction_amount), 1) OVER (ORDER BY YEAR(transaction_date)) AS yoy_growth_rate
+FROM transactions
+GROUP BY year;
+
+
+                            
+
+                      7. Data Visualization (Optional):
+
+Visualization tools like Python's Matplotlib or libraries in R can be used to create various charts based on the query outputs to visualize the data in graphical form.
+Please note that these answers are based on the provided questions and might require adjustments based on your specific database schema and SQL dialect.
+
+
+
+
+
