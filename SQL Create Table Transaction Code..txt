@@ -1,0 +1,30 @@
+CREATE DATABASE CreditCardTransactions;
+
+USE CreditCardTransactions;
+
+CREATE TABLE Transactions (
+    transaction_id INT PRIMARY KEY,
+    card_number VARCHAR(16) NOT NULL,
+    card_holder_name VARCHAR(100) NOT NULL,
+    city VARCHAR(50),
+    card_type VARCHAR(20) NOT NULL,
+    expiration_type VARCHAR(10) NOT NULL,
+    transaction_amount DECIMAL(10, 2) NOT NULL,
+    gender CHAR(1),
+    transaction_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_city (city),
+    INDEX idx_card_type (card_type),
+    INDEX idx_exp_type (expiration_type),
+    INDEX idx_amount (transaction_amount),
+    INDEX idx_gender (gender)
+);
+
+INSERT INTO Transactions (transaction_id, card_number, card_holder_name, city, card_type, expiration_type, transaction_amount, gender)
+VALUES
+    (1, '1234567890123456', 'John Doe', 'New York', 'Visa', '2023-12', 123.45, 'M'),
+    (2, '9876543210987654', 'Jane Smith', 'Los Angeles', 'Mastercard', '2024-05', 45.67, 'F'),
+    -- Add more values here...
+    (299, '5555666677778888', 'Sam Johnson', 'Chicago', 'Visa', '2023-11', 789.01, 'M'),
+    (300, '4444333322221111', 'Emily Brown', 'Houston', 'American Express', '2023-09', 234.56, 'F');
+
+
